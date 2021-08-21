@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="resumes">
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+        const getResumes = async ()=>{
+            try{
+                const r= await axios.get('http://localhost:5000/api/resume/all');
+                return r.data;
+            }
+            catch(e){
+                if(e.response && e.response.data){
+                    return e.response.data;
+                }
+            }
+        }
+
+
+        const resumeContainer = document.querySelector('.resumes');
+
+
+
+
+        getResumes().then((data)=>{
+            
+
+            const {resumes} = data;
+            console.log(resumes)
+            resumes.forEach((resume)=>{
+                resumeContainer.innerHTML+=`
+                <div class="Resume_card" id="${resume._id}">
+                    <span>${resume.first_name} ${resume.last_name}</span>
+                    <span>Job Description:${resume.job_description}</span>
+                    <a href="/view/${resume._id}">View Resume</a>
+                    </div>
+                `;
+            })
+            
+        }).catch((e)=>{
+            console.log(e);
+        })
+
+    </script>
+</body>
+</html>
